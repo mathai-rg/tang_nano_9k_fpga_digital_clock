@@ -1,0 +1,11 @@
+-d E:\Projects\VLSI\FPGA\Gowin_Tang_Nano_9K__GW1NR_LV9_QN88P_C6I5\tn9k_digital_clock\impl\gwsynthesis\tn9k_digital_clock.vg
+-p GW1NR-9C-QFN88P-6
+-pn GW1NR-LV9QN88PC6/I5
+-cst E:\Projects\VLSI\FPGA\Gowin_Tang_Nano_9K__GW1NR_LV9_QN88P_C6I5\tn9k_digital_clock\src\tn9k_digital_clock.cst
+-cfg E:\Projects\VLSI\FPGA\Gowin_Tang_Nano_9K__GW1NR_LV9_QN88P_C6I5\tn9k_digital_clock\impl\pnr\device.cfg
+-bit
+-tr
+-ph
+-timing
+-cst_error
+-route_maxfan 23

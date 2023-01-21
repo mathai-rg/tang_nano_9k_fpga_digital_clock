@@ -1,0 +1,31 @@
+GowinSynthesis start
+Running parser ...
+Analyzing Verilog file 'E:\Projects\VLSI\FPGA\Gowin_Tang_Nano_9K__GW1NR_LV9_QN88P_C6I5\tn9k_digital_clock\src\tn9k_digital_clock.v'
+Compiling module 'segment'("E:\Projects\VLSI\FPGA\Gowin_Tang_Nano_9K__GW1NR_LV9_QN88P_C6I5\tn9k_digital_clock\src\tn9k_digital_clock.v":8)
+NOTE  (EX0101) : Current top module is "segment"
+WARN  (EX0211) : The output port "SA" of module "segment" has no driver, assigning undriven bits to Z, simulation mismatch possible("E:\Projects\VLSI\FPGA\Gowin_Tang_Nano_9K__GW1NR_LV9_QN88P_C6I5\tn9k_digital_clock\src\tn9k_digital_clock.v":12)
+WARN  (EX0211) : The output port "SB" of module "segment" has no driver, assigning undriven bits to Z, simulation mismatch possible("E:\Projects\VLSI\FPGA\Gowin_Tang_Nano_9K__GW1NR_LV9_QN88P_C6I5\tn9k_digital_clock\src\tn9k_digital_clock.v":13)
+WARN  (EX0211) : The output port "SC" of module "segment" has no driver, assigning undriven bits to Z, simulation mismatch possible("E:\Projects\VLSI\FPGA\Gowin_Tang_Nano_9K__GW1NR_LV9_QN88P_C6I5\tn9k_digital_clock\src\tn9k_digital_clock.v":14)
+WARN  (EX0211) : The output port "SD" of module "segment" has no driver, assigning undriven bits to Z, simulation mismatch possible("E:\Projects\VLSI\FPGA\Gowin_Tang_Nano_9K__GW1NR_LV9_QN88P_C6I5\tn9k_digital_clock\src\tn9k_digital_clock.v":15)
+WARN  (EX0211) : The output port "SE" of module "segment" has no driver, assigning undriven bits to Z, simulation mismatch possible("E:\Projects\VLSI\FPGA\Gowin_Tang_Nano_9K__GW1NR_LV9_QN88P_C6I5\tn9k_digital_clock\src\tn9k_digital_clock.v":16)
+WARN  (EX0211) : The output port "SF" of module "segment" has no driver, assigning undriven bits to Z, simulation mismatch possible("E:\Projects\VLSI\FPGA\Gowin_Tang_Nano_9K__GW1NR_LV9_QN88P_C6I5\tn9k_digital_clock\src\tn9k_digital_clock.v":17)
+WARN  (EX0211) : The output port "SG" of module "segment" has no driver, assigning undriven bits to Z, simulation mismatch possible("E:\Projects\VLSI\FPGA\Gowin_Tang_Nano_9K__GW1NR_LV9_QN88P_C6I5\tn9k_digital_clock\src\tn9k_digital_clock.v":18)
+[5%] Running netlist conversion ...
+Running device independent optimization ...
+[10%] Optimizing Phase 0 completed
+[15%] Optimizing Phase 1 completed
+[25%] Optimizing Phase 2 completed
+Running inference ...
+[30%] Inferring Phase 0 completed
+[40%] Inferring Phase 1 completed
+[50%] Inferring Phase 2 completed
+[55%] Inferring Phase 3 completed
+Running technical mapping ...
+[60%] Tech-Mapping Phase 0 completed
+[65%] Tech-Mapping Phase 1 completed
+[75%] Tech-Mapping Phase 2 completed
+[80%] Tech-Mapping Phase 3 completed
+[90%] Tech-Mapping Phase 4 completed
+[95%] Generate netlist file "E:\Projects\VLSI\FPGA\Gowin_Tang_Nano_9K__GW1NR_LV9_QN88P_C6I5\tn9k_digital_clock\impl\gwsynthesis\tn9k_digital_clock.vg" completed
+[100%] Generate report file "E:\Projects\VLSI\FPGA\Gowin_Tang_Nano_9K__GW1NR_LV9_QN88P_C6I5\tn9k_digital_clock\impl\gwsynthesis\tn9k_digital_clock_syn.rpt.html" completed
+GowinSynthesis finish
