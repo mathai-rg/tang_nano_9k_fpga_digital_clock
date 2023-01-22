@@ -1,7 +1,6 @@
 GowinSynthesis start
 Running parser ...
 Analyzing Verilog file 'E:\Projects\Electronics\VLSI\FPGA\tang_nano_9k\tn9k_digital_clock\src\tn9k_digital_clock.v'
-WARN  (EX3069) : Potential always loop found("E:\Projects\Electronics\VLSI\FPGA\tang_nano_9k\tn9k_digital_clock\src\tn9k_digital_clock.v":168)
 Compiling module 'segment'("E:\Projects\Electronics\VLSI\FPGA\tang_nano_9k\tn9k_digital_clock\src\tn9k_digital_clock.v":8)
 NOTE  (EX0101) : Current top module is "segment"
 [5%] Running netlist conversion ...

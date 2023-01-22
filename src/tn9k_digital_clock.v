@@ -26,9 +26,12 @@ module segment(
 
 //------------------------------------------------------------------------------------------------------------------------------//
 reg [25:0] seconds_tick;        //counter for 1Hz clock source                                                                  //
-reg [6:0]  seconds_counter;     //counts seconds                                                                                //
-reg [6:0]  minutes_counter;     //counts minutes                                                                                //
-reg [5:0]  hours_counter;       //counts hours                                                                                  //
+reg [3:0]  seconds_0;           //counts seconds unit place                                                                     //
+reg [2:0]  seconds_1;           //counts seconds tens place                                                                     //
+reg [3:0]  minutes_0;           //counts minutes unit place                                                                     //
+reg [2:0]  minutes_1;           //counts minutes tens place                                                                     //
+reg [3:0]  hours_0;             //counts hours unit place                                                                       //
+reg [1:0]  hours_1;             //counts hours unit place                                                                       //
                                                                                                                                 //
 reg [25:0] dis_sel_clk;         //counter for 1000Hz display select clock                                                       //
 reg [1:0]  dis_sel;             //register for 2 bit counter                                                                    //
@@ -46,37 +49,65 @@ end
 
 //------------------------------------------------------------------------------------------------------------------------------//
 always @(posedge sys_clk or negedge sys_rst_n) begin                         //seconds_counter
-    if(!sys_rst_n)
-        seconds_counter <= 7'd0;                                             //reset handling of seconds_counter
-    else if(seconds_tick == 26'd26999999)
-        if(seconds_counter == 7'd60)
-            seconds_counter <= 7'd0;                                         //reset seconds_counter each 60 seconds
-        else
-            seconds_counter <= seconds_counter + 1'd1;                       //increment seconds_counter
+    if(!sys_rst_n) begin
+        seconds_0 <= 4'd0;                                             //reset handling of seconds_counter
+        seconds_1 <= 3'd0;
+    end
+    else if(seconds_tick == 26'd26999999) begin
+        if(seconds_0 == 4'd10) begin
+            seconds_0 <= 4'd0;                                         //reset seconds_0 each 10 seconds
+            seconds_1 <= seconds_1 + 1'd1;
+        end
+        else begin
+            seconds_0 <= seconds_0 + 1'd1;                       //increment seconds_counter
+        end
+        if(seconds_1 == 3'd6) begin
+            seconds_1 <= 3'd0;
+        end
+    end
+
 end
 //------------------------------------------------------------------------------------------------------------------------------//
 
 //------------------------------------------------------------------------------------------------------------------------------//
 always @(posedge sys_clk or negedge sys_rst_n) begin                         //minutes_counter
-    if(!sys_rst_n)
-        minutes_counter <= 7'd0;                                             //reset handling of minutes counter
-    else if(seconds_counter == 7'd60)
-        if(minutes_counter == 7'd60)
-            minutes_counter <= 7'd0;                                         //reset minutes_counter each 60 minutes
-        else
-            minutes_counter <= minutes_counter +1'd1;                        //increment minutes_counter
+    if(!sys_rst_n) begin
+        minutes_0 <= 4'd0;                                             //reset handling of minutes counter
+        minutes_1 <= 3'd0;
+    end
+    else if(seconds_1 == 3'd6) begin
+        if(minutes_0 == 4'd10) begin
+            minutes_0 <= 4'd0;                                         //reset minutes_counter each 60 minutes
+            minutes_1 <= minutes_1 +1'd1;
+        end
+        else begin
+            minutes_0 <= minutes_0 +1'd1;                        //increment minutes_counter
+        end
+        if(minutes_1 == 3'd6) begin
+            minutes_1 <= 3'd0;
+        end
+    end
 end
 //------------------------------------------------------------------------------------------------------------------------------//
 
 //------------------------------------------------------------------------------------------------------------------------------//
 always @(posedge sys_clk or negedge sys_rst_n) begin                         //hours_counter
-    if(!sys_rst_n)
-        hours_counter <= 6'd0;                                               //reset handling of hours counter
-    else if(minutes_counter == 7'd60)
-        if(hours_counter == 6'd24)
-            hours_counter <= 6'd0;                                           //reset hours_counter each 24 hours
-        else
-            hours_counter <= hours_counter +1'd1;                            //increment hours_counter
+    if(!sys_rst_n) begin
+        hours_0 <= 4'd0;                                               //reset handling of hours counter
+        hours_1 <= 2'd0;
+    end
+    else if(minutes_1 == 3'd6) begin
+        if(hours_0 == 4'd10) begin
+            hours_0 <= 4'd0;                                           //reset hours_counter each 24 hours
+            hours_1 <= hours_1 + 1'd1;
+        end
+        else begin
+            hours_0 <= hours_0 +1'd1;                            //increment hours_counter
+        end
+        if(hours_1 == 2'd3) begin
+            hours_1 <= 2'd0;
+        end
+    end
 end
 //------------------------------------------------------------------------------------------------------------------------------//
 
@@ -89,7 +120,7 @@ always @(posedge sys_clk or negedge sys_rst_n) begin                         //1
         dis_sel_clk <= 26'd0;                                                //reset handling of 1000Hz generator
     else
         if(dis_sel_clk == 26'd26999)
-            dis_sel_clk <= 26'd0;                                            //1Hz generate from 27MHz
+            dis_sel_clk <= 26'd0;                                            //1000Hz generate from 27MHz
         else
             dis_sel_clk <= dis_sel_clk +1'd1;
 end
@@ -109,11 +140,11 @@ end
 always @(posedge sys_clk or negedge sys_rst_n) begin
     if(!sys_rst_n) begin
         S0 <= 1;
-        S1 <= 0;
-        S2 <= 0;
-        S3 <= 0;
+        S1 <= 1;
+        S2 <= 1;
+        S3 <= 1;
     end
-    else
+    else begin
         case(dis_sel)
             2'b00:
                 begin
@@ -151,19 +182,136 @@ always @(posedge sys_clk or negedge sys_rst_n) begin
                     S3 <= 0;
                 end
         endcase
+    end
 end
 //------------------------------------------------------------------------------------------------------------------------------//
 
 //------------------------------------------------------------------------------------------------------------------------------//
-always begin
+//always @(posedge sys_clk or negedge sys_rst_n) begin
+//    if(!sys_rst_n) begin
+//        SA <= 0;
+//        SB <= 0;
+//        SC <= 0;
+//        SD <= 0;
+//        SE <= 0;
+//        SF <= 0;
+//        SG <= 1;
+//    end
+//    else begin
+//        case(seconds_0)
+//            4'b0000:
+//                begin
+//                    SA <= 0;
+//                    SB <= 0;
+//                    SC <= 0;
+//                    SD <= 0;
+//                    SE <= 0;
+//                    SF <= 0;
+//                    SG <= 1;
+//                end
+//            4'b0001:
+//                begin
+//                    SA <= 1;
+//                    SB <= 0;
+//                    SC <= 0;
+//                    SD <= 1;
+//                    SE <= 1;
+//                    SF <= 1;
+//                    SG <= 1;
+//                end
+//            4'b0010:
+//                begin
+//                    SA <= 0;
+//                    SB <= 0;
+//                    SC <= 1;
+//                    SD <= 0;
+//                    SE <= 0;
+//                    SF <= 1;
+//                    SG <= 0;
+//                end
+//            default:
+//                begin
+//                    SA <= 0;
+//                    SB <= 0;
+//                    SC <= 0;
+//                    SD <= 0;
+//                    SE <= 0;
+//                    SF <= 0;
+//                    SG <= 1;
+//                end
+//        endcase
+//    end
+//end
+//------------------------------------------------------------------------------------------------------------------------------//
 
-    SA <= 0;
-    SB <= 0;
-    SC <= 0;
-    SD <= 0;
-    SE <= 0;
-    SF <= 0;
-    SG <= 0;
-
+//test
+always @(posedge sys_clk or negedge sys_rst_n) begin
+    if(!sys_rst_n) begin
+        SA <= 0;
+        SB <= 0;
+        SC <= 0;
+        SD <= 0;
+        SE <= 0;
+        SF <= 0;
+        SG <= 1;
+    end
+    else begin
+        case(dis_sel)
+            2'b00:
+                begin
+                    SA <= 0;
+                    SB <= 0;
+                    SC <= 0;
+                    SD <= 0;
+                    SE <= 0;
+                    SF <= 0;
+                    SG <= 1;
+                end
+            2'b01:
+                begin
+                    SA <= 1;
+                    SB <= 0;
+                    SC <= 0;
+                    SD <= 1;
+                    SE <= 1;
+                    SF <= 1;
+                    SG <= 1;
+                end
+            2'b10:
+                begin
+                    SA <= 0;
+                    SB <= 0;
+                    SC <= 1;
+                    SD <= 0;
+                    SE <= 0;
+                    SF <= 1;
+                    SG <= 0;
+                end
+            2'b11:
+                begin
+                    SA <= 0;
+                    SB <= 0;
+                    SC <= 0;
+                    SD <= 0;
+                    SE <= 1;
+                    SF <= 1;
+                    SG <= 0;
+                end
+            default:
+                begin
+                    SA <= 0;
+                    SB <= 0;
+                    SC <= 0;
+                    SD <= 0;
+                    SE <= 0;
+                    SF <= 0;
+                    SG <= 1;
+                end
+        endcase
+    end
 end
+
+//------------------------------------------------------------------------------------------------------------------------------//
+
+
 endmodule
