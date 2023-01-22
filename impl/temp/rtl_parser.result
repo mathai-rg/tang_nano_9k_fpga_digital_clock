@@ -1,9 +1,9 @@
 [
  {
-  "InstFile" : "E:/Projects/VLSI/FPGA/Gowin_Tang_Nano_9K__GW1NR_LV9_QN88P_C6I5/tn9k_digital_clock/src/tn9k_digital_clock.v",
+  "InstFile" : "E:/Projects/Electronics/VLSI/FPGA/tang_nano_9k/tn9k_digital_clock/src/tn9k_digital_clock.v",
   "InstLine" : 8,
   "InstName" : "segment",
-  "ModuleFile" : "E:/Projects/VLSI/FPGA/Gowin_Tang_Nano_9K__GW1NR_LV9_QN88P_C6I5/tn9k_digital_clock/src/tn9k_digital_clock.v",
+  "ModuleFile" : "E:/Projects/Electronics/VLSI/FPGA/tang_nano_9k/tn9k_digital_clock/src/tn9k_digital_clock.v",
   "ModuleLine" : 8,
   "ModuleName" : "segment"
  }

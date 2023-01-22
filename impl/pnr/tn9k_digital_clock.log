@@ -1,7 +1,7 @@
-Reading netlist file: "E:\Projects\VLSI\FPGA\Gowin_Tang_Nano_9K__GW1NR_LV9_QN88P_C6I5\tn9k_digital_clock\impl\gwsynthesis\tn9k_digital_clock.vg"
-Parsing netlist file "E:\Projects\VLSI\FPGA\Gowin_Tang_Nano_9K__GW1NR_LV9_QN88P_C6I5\tn9k_digital_clock\impl\gwsynthesis\tn9k_digital_clock.vg" completed
+Reading netlist file: "E:\Projects\Electronics\VLSI\FPGA\tang_nano_9k\tn9k_digital_clock\impl\gwsynthesis\tn9k_digital_clock.vg"
+Parsing netlist file "E:\Projects\Electronics\VLSI\FPGA\tang_nano_9k\tn9k_digital_clock\impl\gwsynthesis\tn9k_digital_clock.vg" completed
 Processing netlist completed
-Reading constraint file: "E:\Projects\VLSI\FPGA\Gowin_Tang_Nano_9K__GW1NR_LV9_QN88P_C6I5\tn9k_digital_clock\src\tn9k_digital_clock.cst"
+Reading constraint file: "E:\Projects\Electronics\VLSI\FPGA\tang_nano_9k\tn9k_digital_clock\src\tn9k_digital_clock.cst"
 Physical Constraint parsed completed
 Running placement......
 [10%] Placement Phase 0 completed
@@ -20,10 +20,10 @@ Bitstream generation in progress......
 Bitstream generation completed
 Running power analysis......
 [100%] Power analysis completed
-Generate file "E:\Projects\VLSI\FPGA\Gowin_Tang_Nano_9K__GW1NR_LV9_QN88P_C6I5\tn9k_digital_clock\impl\pnr\tn9k_digital_clock.power.html" completed
-Generate file "E:\Projects\VLSI\FPGA\Gowin_Tang_Nano_9K__GW1NR_LV9_QN88P_C6I5\tn9k_digital_clock\impl\pnr\tn9k_digital_clock.pin.html" completed
-Generate file "E:\Projects\VLSI\FPGA\Gowin_Tang_Nano_9K__GW1NR_LV9_QN88P_C6I5\tn9k_digital_clock\impl\pnr\tn9k_digital_clock.rpt.html" completed
-Generate file "E:\Projects\VLSI\FPGA\Gowin_Tang_Nano_9K__GW1NR_LV9_QN88P_C6I5\tn9k_digital_clock\impl\pnr\tn9k_digital_clock.rpt.txt" completed
-Generate file "E:\Projects\VLSI\FPGA\Gowin_Tang_Nano_9K__GW1NR_LV9_QN88P_C6I5\tn9k_digital_clock\impl\pnr\tn9k_digital_clock.tr.html" completed
-Sat Jan 21 17:56:04 2023
+Generate file "E:\Projects\Electronics\VLSI\FPGA\tang_nano_9k\tn9k_digital_clock\impl\pnr\tn9k_digital_clock.power.html" completed
+Generate file "E:\Projects\Electronics\VLSI\FPGA\tang_nano_9k\tn9k_digital_clock\impl\pnr\tn9k_digital_clock.pin.html" completed
+Generate file "E:\Projects\Electronics\VLSI\FPGA\tang_nano_9k\tn9k_digital_clock\impl\pnr\tn9k_digital_clock.rpt.html" completed
+Generate file "E:\Projects\Electronics\VLSI\FPGA\tang_nano_9k\tn9k_digital_clock\impl\pnr\tn9k_digital_clock.rpt.txt" completed
+Generate file "E:\Projects\Electronics\VLSI\FPGA\tang_nano_9k\tn9k_digital_clock\impl\pnr\tn9k_digital_clock.tr.html" completed
+Sun Jan 22 19:04:56 2023
 

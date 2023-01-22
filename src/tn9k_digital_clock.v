@@ -88,7 +88,7 @@ always @(posedge sys_clk or negedge sys_rst_n) begin                         //1
     if(!sys_rst_n)
         dis_sel_clk <= 26'd0;                                                //reset handling of 1000Hz generator
     else
-        if(dis_sel_clk == 26'd26999999)
+        if(dis_sel_clk == 26'd26999)
             dis_sel_clk <= 26'd0;                                            //1Hz generate from 27MHz
         else
             dis_sel_clk <= dis_sel_clk +1'd1;
@@ -100,7 +100,7 @@ always @(posedge sys_clk or negedge sys_rst_n) begin                         //2
     if(!sys_rst_n)
         dis_sel <= 2'd0;                                                     //reset handling of display select register
     else
-        if(dis_sel_clk == 26'd26999999)
+        if(dis_sel_clk == 26'd26999)
             dis_sel <= dis_sel + 1'd1;                                       //counting through 4 segments
 end
 //------------------------------------------------------------------------------------------------------------------------------//
@@ -153,4 +153,17 @@ always @(posedge sys_clk or negedge sys_rst_n) begin
         endcase
 end
 //------------------------------------------------------------------------------------------------------------------------------//
+
+//------------------------------------------------------------------------------------------------------------------------------//
+always begin
+
+    SA <= 0;
+    SB <= 0;
+    SC <= 0;
+    SD <= 0;
+    SE <= 0;
+    SF <= 0;
+    SG <= 0;
+
+end
 endmodule

@@ -4,13 +4,13 @@
     <Version>beta</Version>
     <Device id="GW1NR-9C" package="QFN88P" speed="6" partNumber="GW1NR-LV9QN88PC6/I5"/>
     <FileList>
-        <File path="E:\Projects\VLSI\FPGA\Gowin_Tang_Nano_9K__GW1NR_LV9_QN88P_C6I5\tn9k_digital_clock\src\tn9k_digital_clock.v" type="verilog"/>
+        <File path="E:\Projects\Electronics\VLSI\FPGA\tang_nano_9k\tn9k_digital_clock\src\tn9k_digital_clock.v" type="verilog"/>
     </FileList>
     <OptionList>
         <Option type="disable_insert_pad" value="0"/>
         <Option type="dsp_balance" value="0"/>
         <Option type="looplimit" value="2000"/>
-        <Option type="output_file" value="E:\Projects\VLSI\FPGA\Gowin_Tang_Nano_9K__GW1NR_LV9_QN88P_C6I5\tn9k_digital_clock\impl\gwsynthesis\tn9k_digital_clock.vg"/>
+        <Option type="output_file" value="E:\Projects\Electronics\VLSI\FPGA\tang_nano_9k\tn9k_digital_clock\impl\gwsynthesis\tn9k_digital_clock.vg"/>
         <Option type="print_all_synthesis_warning" value="0"/>
         <Option type="ram_rw_check" value="1"/>
         <Option type="verilog_language" value="verilog-2001"/>
