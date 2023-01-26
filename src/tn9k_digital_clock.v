@@ -27,21 +27,21 @@ module segment(
 
 //------------------------------------------------------------------------------------------------------------------------------//
 reg [25:0] seconds_tick;        //counter for 1Hz clock source                                                                  //
-
-reg [3:0]  seconds_0;           //counts seconds unit place
+                                                                                                                                //
+reg [3:0]  seconds_0;           //counts seconds unit place                                                                     //
 reg [6:0]  sec_0_b27;                                                                                                           //
-reg [3:0]  seconds_1;
+reg [3:0]  seconds_1;                                                                                                           //
 reg [6:0]  sec_1_b27;           //counts seconds tens place                                                                     //
-
-reg [3:0]  minutes_0;
+                                                                                                                                //
+reg [3:0]  minutes_0;                                                                                                           //
 reg [6:0]  min_0_b27;           //counts minutes unit place                                                                     //
-reg [3:0]  minutes_1;
+reg [3:0]  minutes_1;                                                                                                           //
 reg [6:0]  min_1_b27;           //counts minutes tens place                                                                     //
-
+                                                                                                                                //
 reg [3:0]  hours_0;             //counts hours unit place                                                                       //
-reg [6:0]  hrs_0_b27;
+reg [6:0]  hrs_0_b27;                                                                                                           //
 reg [3:0]  hours_1;             //counts hours tens place                                                                       //
-reg [6:0]  hrs_1_b27;
+reg [6:0]  hrs_1_b27;                                                                                                           //
                                                                                                                                 //
 reg [25:0] dis_sel_clk;         //counter for 1000Hz display select clock                                                       //
 reg [1:0]  dis_sel;             //register for 2 bit counter                                                                    //
