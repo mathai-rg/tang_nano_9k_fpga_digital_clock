@@ -27,19 +27,31 @@ module segment(
 
 //------------------------------------------------------------------------------------------------------------------------------//
 reg [25:0] seconds_tick;        //counter for 1Hz clock source                                                                  //
+
 reg [3:0]  seconds_0;           //counts seconds unit place
-reg [6:0]  sec_0_b27;                                                                     //
+reg [6:0]  sec_0_b27;                                                                                                           //
 reg [3:0]  seconds_1;
 reg [6:0]  sec_1_b27;           //counts seconds tens place                                                                     //
+
 reg [3:0]  minutes_0;
 reg [6:0]  min_0_b27;           //counts minutes unit place                                                                     //
 reg [3:0]  minutes_1;
 reg [6:0]  min_1_b27;           //counts minutes tens place                                                                     //
+
 reg [3:0]  hours_0;             //counts hours unit place                                                                       //
-reg [1:0]  hours_1;             //counts hours unit place                                                                       //
+reg [6:0]  hrs_0_b27;
+reg [3:0]  hours_1;             //counts hours tens place                                                                       //
+reg [6:0]  hrs_1_b27;
                                                                                                                                 //
 reg [25:0] dis_sel_clk;         //counter for 1000Hz display select clock                                                       //
 reg [1:0]  dis_sel;             //register for 2 bit counter                                                                    //
+//------------------------------------------------------------------------------------------------------------------------------//
+
+//------------------------------------------------------------------------------------------------------------------------------//
+//parameter TIME_PERIOD = 26'd27;       //for testbench purposes
+//parameter TIME_PERIOD = 26'd269999;   //for 100Hz clock tick
+//parameter TIME_PERIOD = 26'd2699999;  //for 10Hz clock tick
+parameter TIME_PERIOD = 26'd26999999; //for 1Hz clock tick
 //------------------------------------------------------------------------------------------------------------------------------//
 
 
@@ -47,7 +59,7 @@ reg [1:0]  dis_sel;             //register for 2 bit counter                    
 always @(posedge sys_clk or negedge sys_rst_n) begin                         //1Hz generator
     if(!sys_rst_n)
         seconds_tick <= 26'd0;                                               //reset handling of 1Hz generator
-    else if(seconds_tick == 26'd26999999) begin
+    else if(seconds_tick == TIME_PERIOD) begin
         seconds_tick <= 26'd0;
     end
     else
@@ -61,20 +73,19 @@ always @(posedge sys_clk or negedge sys_rst_n) begin                         //s
         seconds_0 <= 4'd0;                                             //reset handling of seconds_counter
         seconds_1 <= 4'd0;
     end
-    else if(seconds_tick == 26'd26999999) begin
-        if(seconds_0 == 4'd10) begin
-            seconds_0 <= 4'd0;                                         //reset seconds_0 each 10 seconds
-            seconds_1 <= seconds_1 + 1'd1;
-        end
-        else if(seconds_1 == 4'd6) begin
+    else if(seconds_tick == TIME_PERIOD) begin
+        if(seconds_1 == 4'd5 && seconds_0 == 4'd9) begin
+            seconds_0 <= 4'd0;
             seconds_1 <= 4'd0;
         end
-        else begin
-            seconds_0 <= seconds_0 + 1'd1;                       //increment seconds_counter
+        else if(seconds_0 == 4'd9) begin
+            seconds_0 <= 4'd0;
+            seconds_1 <= seconds_1 + 1'd1;
         end
-
+        else begin
+            seconds_0 <= seconds_0 + 1'd1;
+        end
     end
-
 end
 //------------------------------------------------------------------------------------------------------------------------------//
 
@@ -84,13 +95,14 @@ always @(posedge sys_clk or negedge sys_rst_n) begin                         //m
         minutes_0 <= 4'd0;                                             //reset handling of minutes counter
         minutes_1 <= 4'd0;
     end
-    else if(seconds_1 == 4'd6) begin
-        if(minutes_0 == 4'd10) begin
+    else if(seconds_1 == 4'd5 && seconds_0 == 4'd9 && seconds_tick == TIME_PERIOD) begin
+        if(minutes_1 == 4'd5 && minutes_0 == 4'd9) begin
             minutes_0 <= 4'd0;                                         //reset minutes_counter each 60 minutes
-            minutes_1 <= minutes_1 +1'd1;
-        end
-        else if(minutes_1 == 4'd6) begin
             minutes_1 <= 4'd0;
+        end
+        else if(minutes_0 == 4'd9) begin
+            minutes_0 <= 4'd0;
+            minutes_1 <= minutes_1 + 1'd1;
         end
         else begin
             minutes_0 <= minutes_0 +1'd1;                        //increment minutes_counter
@@ -103,15 +115,16 @@ end
 always @(posedge sys_clk or negedge sys_rst_n) begin                         //hours_counter
     if(!sys_rst_n) begin
         hours_0 <= 4'd0;                                               //reset handling of hours counter
-        hours_1 <= 2'd0;
+        hours_1 <= 4'd0;
     end
-    else if(minutes_1 == 4'd6) begin
-        if(hours_0 == 4'd10) begin
+    else if(minutes_1 == 4'd5 && minutes_0 == 4'd9 && seconds_tick == TIME_PERIOD) begin
+        if(hours_1 == 4'd2 && hours_0 == 4'd4) begin
             hours_0 <= 4'd0;                                           //reset hours_counter each 24 hours
-            hours_1 <= hours_1 + 1'd1;
+            hours_1 <= 4'd0;
         end
-        else if(hours_1 == 2'd3) begin
-            hours_1 <= 2'd0;
+        else if(hours_0 == 4'd9) begin
+            hours_0 <= 4'd0;
+            hours_1 <= hours_1 + 1'd1;
         end
         else begin
             hours_0 <= hours_0 +1'd1;                            //increment hours_counter

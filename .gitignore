@@ -1,1 +1,5 @@
 /impl
+
+*.vcd
+*_tb.v
+*.out
