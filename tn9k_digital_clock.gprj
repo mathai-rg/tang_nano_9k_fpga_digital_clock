@@ -9,5 +9,6 @@
         <File path="src/tn9k_digital_clock_tb.v" type="file.verilog" enable="0"/>
         <File path="src/tn9k_digital_clock_top.v" type="file.verilog" enable="1"/>
         <File path="src/tn9k_digital_clock.cst" type="file.cst" enable="1"/>
+        <File path="src/tn9k_digital_clock.rao" type="file.gao" enable="0"/>
     </FileList>
 </Project>

@@ -121,8 +121,8 @@ end
 //------------------------------------------------------------------------------------------------------------------------------//
 always @(posedge sys_clk or negedge sys_rst_n) begin                         //hours_counter
     if(!sys_rst_n) begin
-        hours_0 <= 4'd2;                                               //reset handling of hours counter
-        hours_1 <= 4'd2;
+        hours_0 <= 4'd0;                                               //reset handling of hours counter
+        hours_1 <= 4'd0;
     end
     else if(hours_1 == 4'd2 && hours_0 == 4'd4) begin
         hours_0 <= 4'd0;                                           //reset hours_counter each 24 hours
