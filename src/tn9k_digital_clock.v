@@ -5,7 +5,7 @@
 
 
 //module defenition
-module segment(
+module digital_clock(
     input sys_clk,              //clk input
     input sys_rst_n,            //system reset
 
@@ -29,30 +29,41 @@ module segment(
 reg [25:0] seconds_tick;        //counter for 1Hz clock source                                                                  //
                                                                                                                                 //
 reg [3:0]  seconds_0;           //counts seconds unit place                                                                     //
-reg [6:0]  sec_0_b27;                                                                                                           //
+
+`ifdef SECONDS_DIS
+wire [6:0]  sec_0_b27;                                                                                                          //
+`endif
+
 reg [3:0]  seconds_1;                                                                                                           //
-reg [6:0]  sec_1_b27;           //counts seconds tens place                                                                     //
+
+`ifdef SECONDS_DIS
+wire [6:0]  sec_1_b27;           //counts seconds tens place                                                                    //
+`endif
+
                                                                                                                                 //
 reg [3:0]  minutes_0;                                                                                                           //
-reg [6:0]  min_0_b27;           //counts minutes unit place                                                                     //
+wire [6:0]  min_0_b27;           //counts minutes unit place                                                                    //
 reg [3:0]  minutes_1;                                                                                                           //
-reg [6:0]  min_1_b27;           //counts minutes tens place                                                                     //
+wire [6:0]  min_1_b27;           //counts minutes tens place                                                                    //
                                                                                                                                 //
 reg [3:0]  hours_0;             //counts hours unit place                                                                       //
-reg [6:0]  hrs_0_b27;                                                                                                           //
+wire [6:0]  hrs_0_b27;                                                                                                          //
 reg [3:0]  hours_1;             //counts hours tens place                                                                       //
-reg [6:0]  hrs_1_b27;                                                                                                           //
+wire [6:0]  hrs_1_b27;                                                                                                          //
                                                                                                                                 //
 reg [25:0] dis_sel_clk;         //counter for 1000Hz display select clock                                                       //
 reg [1:0]  dis_sel;             //register for 2 bit counter                                                                    //
 //------------------------------------------------------------------------------------------------------------------------------//
 
 //------------------------------------------------------------------------------------------------------------------------------//
-//parameter TIME_PERIOD = 26'd27;       //for testbench purposes
-//parameter TIME_PERIOD = 26'd269999;   //for 100Hz clock tick
+//parameter TIME_PERIOD = 26'd9;       //for testbench purposes
+parameter TIME_PERIOD = 26'd269999;   //for 100Hz clock tick
 //parameter TIME_PERIOD = 26'd2699999;  //for 10Hz clock tick
-parameter TIME_PERIOD = 26'd26999999; //for 1Hz clock tick
+//parameter TIME_PERIOD = 26'd26999999; //for 1Hz clock tick
+//parameter MUX_RATE = 26'd3;       //for testbench purposes
 parameter MUX_RATE = 26'd26999;       //for 1000Hz display mux rate
+
+//`define SECONDS_DIS; to enable seconds 7 segment outputs
 //------------------------------------------------------------------------------------------------------------------------------//
 
 
@@ -118,7 +129,7 @@ always @(posedge sys_clk or negedge sys_rst_n) begin                         //h
         hours_0 <= 4'd0;                                               //reset handling of hours counter
         hours_1 <= 4'd0;
     end
-    else if(minutes_1 == 4'd5 && minutes_0 == 4'd9 && seconds_tick == TIME_PERIOD) begin
+    else if(minutes_1 == 4'd5 && minutes_0 == 4'd9 && seconds_1 == 4'd5 && seconds_0 == 4'd9 && seconds_tick == TIME_PERIOD) begin
         if(hours_1 == 4'd2 && hours_0 == 4'd4) begin
             hours_0 <= 4'd0;                                           //reset hours_counter each 24 hours
             hours_1 <= 4'd0;
@@ -277,788 +288,68 @@ always @(posedge sys_clk or negedge sys_rst_n) begin
         endcase
     end
 end
-//------------------------------------------------------------------------------------------------------------------------------//
 
 
-
-
-
-//Binary to 7 segment - sec_0_b27
+`ifdef SECONDS_DIS
+//seconds 0 7 segment decoder
 //------------------------------------------------------------------------------------------------------------------------------//
-always @(posedge sys_clk or negedge sys_rst_n) begin
-    if(!sys_rst_n) begin
-        sec_0_b27[0] <= 0;
-        sec_0_b27[1] <= 0;
-        sec_0_b27[2] <= 0;
-        sec_0_b27[3] <= 0;
-        sec_0_b27[4] <= 0;
-        sec_0_b27[5] <= 0;
-        sec_0_b27[6] <= 1;
-    end
-    else begin
-        case(seconds_0)
-            4'b0000:
-                begin
-                    sec_0_b27[0] <= 0;
-                    sec_0_b27[1] <= 0;
-                    sec_0_b27[2] <= 0;
-                    sec_0_b27[3] <= 0;
-                    sec_0_b27[4] <= 0;
-                    sec_0_b27[5] <= 0;
-                    sec_0_b27[6] <= 1;
-                end
-            4'b0001:
-                begin
-                    sec_0_b27[0] <= 1;
-                    sec_0_b27[1] <= 0;
-                    sec_0_b27[2] <= 0;
-                    sec_0_b27[3] <= 1;
-                    sec_0_b27[4] <= 1;
-                    sec_0_b27[5] <= 1;
-                    sec_0_b27[6] <= 1;
-                end
-            4'b0010:
-                begin
-                    sec_0_b27[0] <= 0;
-                    sec_0_b27[1] <= 0;
-                    sec_0_b27[2] <= 1;
-                    sec_0_b27[3] <= 0;
-                    sec_0_b27[4] <= 0;
-                    sec_0_b27[5] <= 1;
-                    sec_0_b27[6] <= 0;
-                end
-            4'b0011:
-                begin
-                    sec_0_b27[0] <= 0;
-                    sec_0_b27[1] <= 0;
-                    sec_0_b27[2] <= 0;
-                    sec_0_b27[3] <= 0;
-                    sec_0_b27[4] <= 1;
-                    sec_0_b27[5] <= 1;
-                    sec_0_b27[6] <= 0;
-                end
-            4'b0100:
-                begin
-                    sec_0_b27[0] <= 1;
-                    sec_0_b27[1] <= 0;
-                    sec_0_b27[2] <= 0;
-                    sec_0_b27[3] <= 1;
-                    sec_0_b27[4] <= 1;
-                    sec_0_b27[5] <= 0;
-                    sec_0_b27[6] <= 0;
-                end
-            4'b0101:
-                begin
-                    sec_0_b27[0] <= 0;
-                    sec_0_b27[1] <= 1;
-                    sec_0_b27[2] <= 0;
-                    sec_0_b27[3] <= 0;
-                    sec_0_b27[4] <= 1;
-                    sec_0_b27[5] <= 0;
-                    sec_0_b27[6] <= 0;
-                end
-            4'b0110:
-                begin
-                    sec_0_b27[0] <= 0;
-                    sec_0_b27[1] <= 1;
-                    sec_0_b27[2] <= 0;
-                    sec_0_b27[3] <= 0;
-                    sec_0_b27[4] <= 0;
-                    sec_0_b27[5] <= 0;
-                    sec_0_b27[6] <= 0;
-                end
-            4'b0111:
-                begin
-                    sec_0_b27[0] <= 0;
-                    sec_0_b27[1] <= 0;
-                    sec_0_b27[2] <= 0;
-                    sec_0_b27[3] <= 1;
-                    sec_0_b27[4] <= 1;
-                    sec_0_b27[5] <= 1;
-                    sec_0_b27[6] <= 1;
-                end
-            4'b1000:
-                begin
-                    sec_0_b27[0] <= 0;
-                    sec_0_b27[1] <= 0;
-                    sec_0_b27[2] <= 0;
-                    sec_0_b27[3] <= 0;
-                    sec_0_b27[4] <= 0;
-                    sec_0_b27[5] <= 0;
-                    sec_0_b27[6] <= 0;
-                end
-            4'b1001:
-                begin
-                    sec_0_b27[0] <= 0;
-                    sec_0_b27[1] <= 0;
-                    sec_0_b27[2] <= 0;
-                    sec_0_b27[3] <= 1;
-                    sec_0_b27[4] <= 1;
-                    sec_0_b27[5] <= 0;
-                    sec_0_b27[6] <= 0;
-                end
-            default:
-                begin
-                    sec_0_b27[0] <= 0;
-                    sec_0_b27[1] <= 0;
-                    sec_0_b27[2] <= 0;
-                    sec_0_b27[3] <= 0;
-                    sec_0_b27[4] <= 0;
-                    sec_0_b27[5] <= 0;
-                    sec_0_b27[6] <= 1;
-                end
-        endcase
-    end
-end
+bin_to_7_seg s07s(
+    .clk(sys_clk),
+    .rstn(sys_rst_n),
+    .bin(seconds_0),
+    .out(sec_0_b27)
+);
 //------------------------------------------------------------------------------------------------------------------------------//
 
-//Binary to 7 segment - sec_1_b27
+//seconds 1 7 segment decoder
 //------------------------------------------------------------------------------------------------------------------------------//
-always @(posedge sys_clk or negedge sys_rst_n) begin
-    if(!sys_rst_n) begin
-        sec_1_b27[0] <= 0;
-        sec_1_b27[1] <= 0;
-        sec_1_b27[2] <= 0;
-        sec_1_b27[3] <= 0;
-        sec_1_b27[4] <= 0;
-        sec_1_b27[5] <= 0;
-        sec_1_b27[6] <= 1;
-    end
-    else begin
-        case(seconds_1)
-            4'b0000:
-                begin
-                    sec_1_b27[0] <= 0;
-                    sec_1_b27[1] <= 0;
-                    sec_1_b27[2] <= 0;
-                    sec_1_b27[3] <= 0;
-                    sec_1_b27[4] <= 0;
-                    sec_1_b27[5] <= 0;
-                    sec_1_b27[6] <= 1;
-                end
-            4'b0001:
-                begin
-                    sec_1_b27[0] <= 1;
-                    sec_1_b27[1] <= 0;
-                    sec_1_b27[2] <= 0;
-                    sec_1_b27[3] <= 1;
-                    sec_1_b27[4] <= 1;
-                    sec_1_b27[5] <= 1;
-                    sec_1_b27[6] <= 1;
-                end
-            4'b0010:
-                begin
-                    sec_1_b27[0] <= 0;
-                    sec_1_b27[1] <= 0;
-                    sec_1_b27[2] <= 1;
-                    sec_1_b27[3] <= 0;
-                    sec_1_b27[4] <= 0;
-                    sec_1_b27[5] <= 1;
-                    sec_1_b27[6] <= 0;
-                end
-            4'b0011:
-                begin
-                    sec_1_b27[0] <= 0;
-                    sec_1_b27[1] <= 0;
-                    sec_1_b27[2] <= 0;
-                    sec_1_b27[3] <= 0;
-                    sec_1_b27[4] <= 1;
-                    sec_1_b27[5] <= 1;
-                    sec_1_b27[6] <= 0;
-                end
-            4'b0100:
-                begin
-                    sec_1_b27[0] <= 1;
-                    sec_1_b27[1] <= 0;
-                    sec_1_b27[2] <= 0;
-                    sec_1_b27[3] <= 1;
-                    sec_1_b27[4] <= 1;
-                    sec_1_b27[5] <= 0;
-                    sec_1_b27[6] <= 0;
-                end
-            4'b0101:
-                begin
-                    sec_1_b27[0] <= 0;
-                    sec_1_b27[1] <= 1;
-                    sec_1_b27[2] <= 0;
-                    sec_1_b27[3] <= 0;
-                    sec_1_b27[4] <= 1;
-                    sec_1_b27[5] <= 0;
-                    sec_1_b27[6] <= 0;
-                end
-            4'b0110:
-                begin
-                    sec_1_b27[0] <= 0;
-                    sec_1_b27[1] <= 1;
-                    sec_1_b27[2] <= 0;
-                    sec_1_b27[3] <= 0;
-                    sec_1_b27[4] <= 0;
-                    sec_1_b27[5] <= 0;
-                    sec_1_b27[6] <= 0;
-                end
-            4'b0111:
-                begin
-                    sec_1_b27[0] <= 0;
-                    sec_1_b27[1] <= 0;
-                    sec_1_b27[2] <= 0;
-                    sec_1_b27[3] <= 1;
-                    sec_1_b27[4] <= 1;
-                    sec_1_b27[5] <= 1;
-                    sec_1_b27[6] <= 1;
-                end
-            4'b1000:
-                begin
-                    sec_1_b27[0] <= 0;
-                    sec_1_b27[1] <= 0;
-                    sec_1_b27[2] <= 0;
-                    sec_1_b27[3] <= 0;
-                    sec_1_b27[4] <= 0;
-                    sec_1_b27[5] <= 0;
-                    sec_1_b27[6] <= 0;
-                end
-            4'b1001:
-                begin
-                    sec_1_b27[0] <= 0;
-                    sec_1_b27[1] <= 0;
-                    sec_1_b27[2] <= 0;
-                    sec_1_b27[3] <= 1;
-                    sec_1_b27[4] <= 1;
-                    sec_1_b27[5] <= 0;
-                    sec_1_b27[6] <= 0;
-                end
-            default:
-                begin
-                    sec_1_b27[0] <= 0;
-                    sec_1_b27[1] <= 0;
-                    sec_1_b27[2] <= 0;
-                    sec_1_b27[3] <= 0;
-                    sec_1_b27[4] <= 0;
-                    sec_1_b27[5] <= 0;
-                    sec_1_b27[6] <= 1;
-                end
-        endcase
-    end
-end
+bin_to_7_seg s17s(
+    .clk(sys_clk),
+    .rstn(sys_rst_n),
+    .bin(seconds_1),
+    .out(sec_1_b27)
+);
+//------------------------------------------------------------------------------------------------------------------------------//
+`endif
+
+//minutes 0 7 segment decoder
+//------------------------------------------------------------------------------------------------------------------------------//
+bin_to_7_seg m07s(
+    .clk(sys_clk),
+    .rstn(sys_rst_n),
+    .bin(minutes_0),
+    .out(min_0_b27)
+);
 //------------------------------------------------------------------------------------------------------------------------------//
 
-//Binary to 7 segment - min_0_b27
+//minutes 1 7 segment decoder
 //------------------------------------------------------------------------------------------------------------------------------//
-always @(posedge sys_clk or negedge sys_rst_n) begin
-    if(!sys_rst_n) begin
-        min_0_b27[0] <= 0;
-        min_0_b27[1] <= 0;
-        min_0_b27[2] <= 0;
-        min_0_b27[3] <= 0;
-        min_0_b27[4] <= 0;
-        min_0_b27[5] <= 0;
-        min_0_b27[6] <= 1;
-    end
-    else begin
-        case(minutes_0)
-            4'b0000:
-                begin
-                    min_0_b27[0] <= 0;
-                    min_0_b27[1] <= 0;
-                    min_0_b27[2] <= 0;
-                    min_0_b27[3] <= 0;
-                    min_0_b27[4] <= 0;
-                    min_0_b27[5] <= 0;
-                    min_0_b27[6] <= 1;
-                end
-            4'b0001:
-                begin
-                    min_0_b27[0] <= 1;
-                    min_0_b27[1] <= 0;
-                    min_0_b27[2] <= 0;
-                    min_0_b27[3] <= 1;
-                    min_0_b27[4] <= 1;
-                    min_0_b27[5] <= 1;
-                    min_0_b27[6] <= 1;
-                end
-            4'b0010:
-                begin
-                    min_0_b27[0] <= 0;
-                    min_0_b27[1] <= 0;
-                    min_0_b27[2] <= 1;
-                    min_0_b27[3] <= 0;
-                    min_0_b27[4] <= 0;
-                    min_0_b27[5] <= 1;
-                    min_0_b27[6] <= 0;
-                end
-            4'b0011:
-                begin
-                    min_0_b27[0] <= 0;
-                    min_0_b27[1] <= 0;
-                    min_0_b27[2] <= 0;
-                    min_0_b27[3] <= 0;
-                    min_0_b27[4] <= 1;
-                    min_0_b27[5] <= 1;
-                    min_0_b27[6] <= 0;
-                end
-            4'b0100:
-                begin
-                    min_0_b27[0] <= 1;
-                    min_0_b27[1] <= 0;
-                    min_0_b27[2] <= 0;
-                    min_0_b27[3] <= 1;
-                    min_0_b27[4] <= 1;
-                    min_0_b27[5] <= 0;
-                    min_0_b27[6] <= 0;
-                end
-            4'b0101:
-                begin
-                    min_0_b27[0] <= 0;
-                    min_0_b27[1] <= 1;
-                    min_0_b27[2] <= 0;
-                    min_0_b27[3] <= 0;
-                    min_0_b27[4] <= 1;
-                    min_0_b27[5] <= 0;
-                    min_0_b27[6] <= 0;
-                end
-            4'b0110:
-                begin
-                    min_0_b27[0] <= 0;
-                    min_0_b27[1] <= 1;
-                    min_0_b27[2] <= 0;
-                    min_0_b27[3] <= 0;
-                    min_0_b27[4] <= 0;
-                    min_0_b27[5] <= 0;
-                    min_0_b27[6] <= 0;
-                end
-            4'b0111:
-                begin
-                    min_0_b27[0] <= 0;
-                    min_0_b27[1] <= 0;
-                    min_0_b27[2] <= 0;
-                    min_0_b27[3] <= 1;
-                    min_0_b27[4] <= 1;
-                    min_0_b27[5] <= 1;
-                    min_0_b27[6] <= 1;
-                end
-            4'b1000:
-                begin
-                    min_0_b27[0] <= 0;
-                    min_0_b27[1] <= 0;
-                    min_0_b27[2] <= 0;
-                    min_0_b27[3] <= 0;
-                    min_0_b27[4] <= 0;
-                    min_0_b27[5] <= 0;
-                    min_0_b27[6] <= 0;
-                end
-            4'b1001:
-                begin
-                    min_0_b27[0] <= 0;
-                    min_0_b27[1] <= 0;
-                    min_0_b27[2] <= 0;
-                    min_0_b27[3] <= 1;
-                    min_0_b27[4] <= 1;
-                    min_0_b27[5] <= 0;
-                    min_0_b27[6] <= 0;
-                end
-            default:
-                begin
-                    min_0_b27[0] <= 0;
-                    min_0_b27[1] <= 0;
-                    min_0_b27[2] <= 0;
-                    min_0_b27[3] <= 0;
-                    min_0_b27[4] <= 0;
-                    min_0_b27[5] <= 0;
-                    min_0_b27[6] <= 1;
-                end
-        endcase
-    end
-end
+bin_to_7_seg m17s(
+    .clk(sys_clk),
+    .rstn(sys_rst_n),
+    .bin(minutes_1),
+    .out(min_1_b27)
+);
 //------------------------------------------------------------------------------------------------------------------------------//
 
-//Binary to 7 segment - min_1_b27
+//hours 0 7 segment decoder
 //------------------------------------------------------------------------------------------------------------------------------//
-always @(posedge sys_clk or negedge sys_rst_n) begin
-    if(!sys_rst_n) begin
-        min_1_b27[0] <= 0;
-        min_1_b27[1] <= 0;
-        min_1_b27[2] <= 0;
-        min_1_b27[3] <= 0;
-        min_1_b27[4] <= 0;
-        min_1_b27[5] <= 0;
-        min_1_b27[6] <= 1;
-    end
-    else begin
-        case(minutes_1)
-            4'b0000:
-                begin
-                    min_1_b27[0] <= 0;
-                    min_1_b27[1] <= 0;
-                    min_1_b27[2] <= 0;
-                    min_1_b27[3] <= 0;
-                    min_1_b27[4] <= 0;
-                    min_1_b27[5] <= 0;
-                    min_1_b27[6] <= 1;
-                end
-            4'b0001:
-                begin
-                    min_1_b27[0] <= 1;
-                    min_1_b27[1] <= 0;
-                    min_1_b27[2] <= 0;
-                    min_1_b27[3] <= 1;
-                    min_1_b27[4] <= 1;
-                    min_1_b27[5] <= 1;
-                    min_1_b27[6] <= 1;
-                end
-            4'b0010:
-                begin
-                    min_1_b27[0] <= 0;
-                    min_1_b27[1] <= 0;
-                    min_1_b27[2] <= 1;
-                    min_1_b27[3] <= 0;
-                    min_1_b27[4] <= 0;
-                    min_1_b27[5] <= 1;
-                    min_1_b27[6] <= 0;
-                end
-            4'b0011:
-                begin
-                    min_1_b27[0] <= 0;
-                    min_1_b27[1] <= 0;
-                    min_1_b27[2] <= 0;
-                    min_1_b27[3] <= 0;
-                    min_1_b27[4] <= 1;
-                    min_1_b27[5] <= 1;
-                    min_1_b27[6] <= 0;
-                end
-            4'b0100:
-                begin
-                    min_1_b27[0] <= 1;
-                    min_1_b27[1] <= 0;
-                    min_1_b27[2] <= 0;
-                    min_1_b27[3] <= 1;
-                    min_1_b27[4] <= 1;
-                    min_1_b27[5] <= 0;
-                    min_1_b27[6] <= 0;
-                end
-            4'b0101:
-                begin
-                    min_1_b27[0] <= 0;
-                    min_1_b27[1] <= 1;
-                    min_1_b27[2] <= 0;
-                    min_1_b27[3] <= 0;
-                    min_1_b27[4] <= 1;
-                    min_1_b27[5] <= 0;
-                    min_1_b27[6] <= 0;
-                end
-            4'b0110:
-                begin
-                    min_1_b27[0] <= 0;
-                    min_1_b27[1] <= 1;
-                    min_1_b27[2] <= 0;
-                    min_1_b27[3] <= 0;
-                    min_1_b27[4] <= 0;
-                    min_1_b27[5] <= 0;
-                    min_1_b27[6] <= 0;
-                end
-            4'b0111:
-                begin
-                    min_1_b27[0] <= 0;
-                    min_1_b27[1] <= 0;
-                    min_1_b27[2] <= 0;
-                    min_1_b27[3] <= 1;
-                    min_1_b27[4] <= 1;
-                    min_1_b27[5] <= 1;
-                    min_1_b27[6] <= 1;
-                end
-            4'b1000:
-                begin
-                    min_1_b27[0] <= 0;
-                    min_1_b27[1] <= 0;
-                    min_1_b27[2] <= 0;
-                    min_1_b27[3] <= 0;
-                    min_1_b27[4] <= 0;
-                    min_1_b27[5] <= 0;
-                    min_1_b27[6] <= 0;
-                end
-            4'b1001:
-                begin
-                    min_1_b27[0] <= 0;
-                    min_1_b27[1] <= 0;
-                    min_1_b27[2] <= 0;
-                    min_1_b27[3] <= 1;
-                    min_1_b27[4] <= 1;
-                    min_1_b27[5] <= 0;
-                    min_1_b27[6] <= 0;
-                end
-            default:
-                begin
-                    min_1_b27[0] <= 0;
-                    min_1_b27[1] <= 0;
-                    min_1_b27[2] <= 0;
-                    min_1_b27[3] <= 0;
-                    min_1_b27[4] <= 0;
-                    min_1_b27[5] <= 0;
-                    min_1_b27[6] <= 1;
-                end
-        endcase
-    end
-end
+bin_to_7_seg h07s(
+    .clk(sys_clk),
+    .rstn(sys_rst_n),
+    .bin(hours_0),
+    .out(hrs_0_b27)
+);
 //------------------------------------------------------------------------------------------------------------------------------//
 
-//Binary to 7 segment - hrs_0_b27
+//hours 1 7 segment decoder
 //------------------------------------------------------------------------------------------------------------------------------//
-always @(posedge sys_clk or negedge sys_rst_n) begin
-    if(!sys_rst_n) begin
-        hrs_0_b27[0] <= 0;
-        hrs_0_b27[1] <= 0;
-        hrs_0_b27[2] <= 0;
-        hrs_0_b27[3] <= 0;
-        hrs_0_b27[4] <= 0;
-        hrs_0_b27[5] <= 0;
-        hrs_0_b27[6] <= 1;
-    end
-    else begin
-        case(minutes_1)
-            4'b0000:
-                begin
-                    hrs_0_b27[0] <= 0;
-                    hrs_0_b27[1] <= 0;
-                    hrs_0_b27[2] <= 0;
-                    hrs_0_b27[3] <= 0;
-                    hrs_0_b27[4] <= 0;
-                    hrs_0_b27[5] <= 0;
-                    hrs_0_b27[6] <= 1;
-                end
-            4'b0001:
-                begin
-                    hrs_0_b27[0] <= 1;
-                    hrs_0_b27[1] <= 0;
-                    hrs_0_b27[2] <= 0;
-                    hrs_0_b27[3] <= 1;
-                    hrs_0_b27[4] <= 1;
-                    hrs_0_b27[5] <= 1;
-                    hrs_0_b27[6] <= 1;
-                end
-            4'b0010:
-                begin
-                    hrs_0_b27[0] <= 0;
-                    hrs_0_b27[1] <= 0;
-                    hrs_0_b27[2] <= 1;
-                    hrs_0_b27[3] <= 0;
-                    hrs_0_b27[4] <= 0;
-                    hrs_0_b27[5] <= 1;
-                    hrs_0_b27[6] <= 0;
-                end
-            4'b0011:
-                begin
-                    hrs_0_b27[0] <= 0;
-                    hrs_0_b27[1] <= 0;
-                    hrs_0_b27[2] <= 0;
-                    hrs_0_b27[3] <= 0;
-                    hrs_0_b27[4] <= 1;
-                    hrs_0_b27[5] <= 1;
-                    hrs_0_b27[6] <= 0;
-                end
-            4'b0100:
-                begin
-                    hrs_0_b27[0] <= 1;
-                    hrs_0_b27[1] <= 0;
-                    hrs_0_b27[2] <= 0;
-                    hrs_0_b27[3] <= 1;
-                    hrs_0_b27[4] <= 1;
-                    hrs_0_b27[5] <= 0;
-                    hrs_0_b27[6] <= 0;
-                end
-            4'b0101:
-                begin
-                    hrs_0_b27[0] <= 0;
-                    hrs_0_b27[1] <= 1;
-                    hrs_0_b27[2] <= 0;
-                    hrs_0_b27[3] <= 0;
-                    hrs_0_b27[4] <= 1;
-                    hrs_0_b27[5] <= 0;
-                    hrs_0_b27[6] <= 0;
-                end
-            4'b0110:
-                begin
-                    hrs_0_b27[0] <= 0;
-                    hrs_0_b27[1] <= 1;
-                    hrs_0_b27[2] <= 0;
-                    hrs_0_b27[3] <= 0;
-                    hrs_0_b27[4] <= 0;
-                    hrs_0_b27[5] <= 0;
-                    hrs_0_b27[6] <= 0;
-                end
-            4'b0111:
-                begin
-                    hrs_0_b27[0] <= 0;
-                    hrs_0_b27[1] <= 0;
-                    hrs_0_b27[2] <= 0;
-                    hrs_0_b27[3] <= 1;
-                    hrs_0_b27[4] <= 1;
-                    hrs_0_b27[5] <= 1;
-                    hrs_0_b27[6] <= 1;
-                end
-            4'b1000:
-                begin
-                    hrs_0_b27[0] <= 0;
-                    hrs_0_b27[1] <= 0;
-                    hrs_0_b27[2] <= 0;
-                    hrs_0_b27[3] <= 0;
-                    hrs_0_b27[4] <= 0;
-                    hrs_0_b27[5] <= 0;
-                    hrs_0_b27[6] <= 0;
-                end
-            4'b1001:
-                begin
-                    hrs_0_b27[0] <= 0;
-                    hrs_0_b27[1] <= 0;
-                    hrs_0_b27[2] <= 0;
-                    hrs_0_b27[3] <= 1;
-                    hrs_0_b27[4] <= 1;
-                    hrs_0_b27[5] <= 0;
-                    hrs_0_b27[6] <= 0;
-                end
-            default:
-                begin
-                    hrs_0_b27[0] <= 0;
-                    hrs_0_b27[1] <= 0;
-                    hrs_0_b27[2] <= 0;
-                    hrs_0_b27[3] <= 0;
-                    hrs_0_b27[4] <= 0;
-                    hrs_0_b27[5] <= 0;
-                    hrs_0_b27[6] <= 1;
-                end
-        endcase
-    end
-end
+bin_to_7_seg h17s(
+    .clk(sys_clk),
+    .rstn(sys_rst_n),
+    .bin(hours_1),
+    .out(hrs_1_b27)
+);
 //------------------------------------------------------------------------------------------------------------------------------//
-
-//Binary to 7 segment - hrs_1_b27
-//------------------------------------------------------------------------------------------------------------------------------//
-always @(posedge sys_clk or negedge sys_rst_n) begin
-    if(!sys_rst_n) begin
-        hrs_1_b27[0] <= 0;
-        hrs_1_b27[1] <= 0;
-        hrs_1_b27[2] <= 0;
-        hrs_1_b27[3] <= 0;
-        hrs_1_b27[4] <= 0;
-        hrs_1_b27[5] <= 0;
-        hrs_1_b27[6] <= 1;
-    end
-    else begin
-        case(minutes_1)
-            4'b0000:
-                begin
-                    hrs_1_b27[0] <= 0;
-                    hrs_1_b27[1] <= 0;
-                    hrs_1_b27[2] <= 0;
-                    hrs_1_b27[3] <= 0;
-                    hrs_1_b27[4] <= 0;
-                    hrs_1_b27[5] <= 0;
-                    hrs_1_b27[6] <= 1;
-                end
-            4'b0001:
-                begin
-                    hrs_1_b27[0] <= 1;
-                    hrs_1_b27[1] <= 0;
-                    hrs_1_b27[2] <= 0;
-                    hrs_1_b27[3] <= 1;
-                    hrs_1_b27[4] <= 1;
-                    hrs_1_b27[5] <= 1;
-                    hrs_1_b27[6] <= 1;
-                end
-            4'b0010:
-                begin
-                    hrs_1_b27[0] <= 0;
-                    hrs_1_b27[1] <= 0;
-                    hrs_1_b27[2] <= 1;
-                    hrs_1_b27[3] <= 0;
-                    hrs_1_b27[4] <= 0;
-                    hrs_1_b27[5] <= 1;
-                    hrs_1_b27[6] <= 0;
-                end
-            4'b0011:
-                begin
-                    hrs_1_b27[0] <= 0;
-                    hrs_1_b27[1] <= 0;
-                    hrs_1_b27[2] <= 0;
-                    hrs_1_b27[3] <= 0;
-                    hrs_1_b27[4] <= 1;
-                    hrs_1_b27[5] <= 1;
-                    hrs_1_b27[6] <= 0;
-                end
-            4'b0100:
-                begin
-                    hrs_1_b27[0] <= 1;
-                    hrs_1_b27[1] <= 0;
-                    hrs_1_b27[2] <= 0;
-                    hrs_1_b27[3] <= 1;
-                    hrs_1_b27[4] <= 1;
-                    hrs_1_b27[5] <= 0;
-                    hrs_1_b27[6] <= 0;
-                end
-            4'b0101:
-                begin
-                    hrs_1_b27[0] <= 0;
-                    hrs_1_b27[1] <= 1;
-                    hrs_1_b27[2] <= 0;
-                    hrs_1_b27[3] <= 0;
-                    hrs_1_b27[4] <= 1;
-                    hrs_1_b27[5] <= 0;
-                    hrs_1_b27[6] <= 0;
-                end
-            4'b0110:
-                begin
-                    hrs_1_b27[0] <= 0;
-                    hrs_1_b27[1] <= 1;
-                    hrs_1_b27[2] <= 0;
-                    hrs_1_b27[3] <= 0;
-                    hrs_1_b27[4] <= 0;
-                    hrs_1_b27[5] <= 0;
-                    hrs_1_b27[6] <= 0;
-                end
-            4'b0111:
-                begin
-                    hrs_1_b27[0] <= 0;
-                    hrs_1_b27[1] <= 0;
-                    hrs_1_b27[2] <= 0;
-                    hrs_1_b27[3] <= 1;
-                    hrs_1_b27[4] <= 1;
-                    hrs_1_b27[5] <= 1;
-                    hrs_1_b27[6] <= 1;
-                end
-            4'b1000:
-                begin
-                    hrs_1_b27[0] <= 0;
-                    hrs_1_b27[1] <= 0;
-                    hrs_1_b27[2] <= 0;
-                    hrs_1_b27[3] <= 0;
-                    hrs_1_b27[4] <= 0;
-                    hrs_1_b27[5] <= 0;
-                    hrs_1_b27[6] <= 0;
-                end
-            4'b1001:
-                begin
-                    hrs_1_b27[0] <= 0;
-                    hrs_1_b27[1] <= 0;
-                    hrs_1_b27[2] <= 0;
-                    hrs_1_b27[3] <= 1;
-                    hrs_1_b27[4] <= 1;
-                    hrs_1_b27[5] <= 0;
-                    hrs_1_b27[6] <= 0;
-                end
-            default:
-                begin
-                    hrs_1_b27[0] <= 0;
-                    hrs_1_b27[1] <= 0;
-                    hrs_1_b27[2] <= 0;
-                    hrs_1_b27[3] <= 0;
-                    hrs_1_b27[4] <= 0;
-                    hrs_1_b27[5] <= 0;
-                    hrs_1_b27[6] <= 1;
-                end
-        endcase
-    end
-end
-//------------------------------------------------------------------------------------------------------------------------------//
-
-
-//------------------------------------------------------------------------------------------------------------------------------//
-
 
 endmodule
