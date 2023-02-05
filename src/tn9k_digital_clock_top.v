@@ -54,9 +54,9 @@ reg [1:0]  dis_sel;             //register for 2 bit counter                    
 
 //------------------------------------------------------------------------------------------------------------------------------//
 //parameter TIME_PERIOD = 26'd9;       //for testbench purposes
-parameter TIME_PERIOD = 26'd269999;   //for 100Hz clock tick
+//parameter TIME_PERIOD = 26'd269999;   //for 100Hz clock tick
 //parameter TIME_PERIOD = 26'd2699999;  //for 10Hz clock tick
-//parameter TIME_PERIOD = 26'd26999999; //for 1Hz clock tick
+parameter TIME_PERIOD = 26'd26999999; //for 1Hz clock tick
 //parameter MUX_RATE = 26'd3;       //for testbench purposes
 parameter MUX_RATE = 26'd26999;       //for 1000Hz display mux rate
 //------------------------------------------------------------------------------------------------------------------------------//
@@ -121,15 +121,15 @@ end
 //------------------------------------------------------------------------------------------------------------------------------//
 always @(posedge sys_clk or negedge sys_rst_n) begin                         //hours_counter
     if(!sys_rst_n) begin
-        hours_0 <= 4'd0;                                               //reset handling of hours counter
+        hours_0 <= 4'd2;                                               //reset handling of hours counter
+        hours_1 <= 4'd2;
+    end
+    else if(hours_1 == 4'd2 && hours_0 == 4'd4) begin
+        hours_0 <= 4'd0;                                           //reset hours_counter each 24 hours
         hours_1 <= 4'd0;
     end
     else if(minutes_1 == 4'd5 && minutes_0 == 4'd9 && seconds_1 == 4'd5 && seconds_0 == 4'd9 && seconds_tick == TIME_PERIOD) begin
-        if(hours_1 == 4'd2 && hours_0 == 4'd4) begin
-            hours_0 <= 4'd0;                                           //reset hours_counter each 24 hours
-            hours_1 <= 4'd0;
-        end
-        else if(hours_0 == 4'd9) begin
+        if(hours_0 == 4'd9) begin
             hours_0 <= 4'd0;
             hours_1 <= hours_1 + 1'd1;
         end
