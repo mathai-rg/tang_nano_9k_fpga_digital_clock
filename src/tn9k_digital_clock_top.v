@@ -24,22 +24,19 @@ module digital_clock(
 );
 
 
+//`defines
+//`define SECONDS_DIS; to enable seconds 7 segment outputs
 
 //------------------------------------------------------------------------------------------------------------------------------//
 reg [25:0] seconds_tick;        //counter for 1Hz clock source                                                                  //
                                                                                                                                 //
 reg [3:0]  seconds_0;           //counts seconds unit place                                                                     //
-
-`ifdef SECONDS_DIS
-wire [6:0]  sec_0_b27;                                                                                                          //
-`endif
-
 reg [3:0]  seconds_1;                                                                                                           //
-
-`ifdef SECONDS_DIS
+                                                                                                                                //
+`ifdef SECONDS_DIS                                                                                                              //
+wire [6:0]  sec_0_b27;                                                                                                          //
 wire [6:0]  sec_1_b27;           //counts seconds tens place                                                                    //
 `endif
-
                                                                                                                                 //
 reg [3:0]  minutes_0;                                                                                                           //
 wire [6:0]  min_0_b27;           //counts minutes unit place                                                                    //
@@ -62,8 +59,6 @@ parameter TIME_PERIOD = 26'd269999;   //for 100Hz clock tick
 //parameter TIME_PERIOD = 26'd26999999; //for 1Hz clock tick
 //parameter MUX_RATE = 26'd3;       //for testbench purposes
 parameter MUX_RATE = 26'd26999;       //for 1000Hz display mux rate
-
-//`define SECONDS_DIS; to enable seconds 7 segment outputs
 //------------------------------------------------------------------------------------------------------------------------------//
 
 
