@@ -75,8 +75,8 @@ end
 //set input handling
 wire set_min, set_hr;
 
-assign set_min = ((state == MODE_MIN)? set: 0);
-assign set_hr = ((state == MODE_HR)? set:0);
+assign set_min = ((state == MODE_MIN)? set: 1);
+assign set_hr = ((state == MODE_HR)? set: 1);
 
 
 //27MHz clock divider to 1000Hz
@@ -104,7 +104,6 @@ assign clk_1K = clk_reg_1K;
 
 //segment selector
 reg [3:0] segment;
-localparam SEG0 = 2'b00, SEG1 = 2'b01, SEG2 = 2'b10, SEG3 = 2'b11;
 
 always @(posedge clk_1K or negedge reset_n) begin
     if(reset_n == 1'b0) begin
@@ -121,6 +120,99 @@ assign S2 = segment[2];
 assign S3 = segment[3];
 
 
-//
+//27MHz clock divider to 1Hz
+reg [23:0] clk_div_27M;
+reg clk_reg_1H;
+localparam DIV_27M = 24'd9; //24'd‭13499999 for 1Hz output clock
+wire clk_1H;
+
+always @(posedge sys_clk or negedge reset_n) begin
+    if(reset_n == 1'b0) begin
+        clk_div_27M <= 24'b0;
+        clk_reg_1H <= 1'b0;
+    end
+    else if(clk_div_27M == DIV_27M) begin
+        clk_div_27M <= 24'b0;
+        clk_reg_1H <= clk_reg_1H + 1'b1;
+    end
+    else begin
+        clk_div_27M <= clk_div_27M + 1'b1;
+    end
+end
+
+assign clk_1H = clk_reg_1H;
+
+
+//seconds counter
+reg [6:0] sec_count;
+reg min_tick_reg;
+wire min_tick_out;
+localparam SEC_MOD = 7'd9; //7'd59 for 1 tick every 60 seconds
+
+always @(posedge clk_1H or negedge reset_n) begin
+    if(reset_n == 1'b0) begin
+        sec_count <= 7'b0;
+        min_tick_reg <= 1'b0;
+    end
+    else if(sec_count == SEC_MOD) begin
+        sec_count <= 7'b0;
+        min_tick_reg <= 1'b1;
+    end
+    else begin
+        sec_count <= sec_count + 1'b1;
+        min_tick_reg <= 1'b0;
+    end
+end
+
+assign min_tick_out = min_tick_reg;
+
+
+//minutes counter
+reg [6:0] min_count;
+reg hr_tick_reg;
+wire hr_tick_out;
+localparam MIN_MOD = 7'd9; //7'd59 for tick every 60 minutes
+wire min_tick;
+
+assign min_tick = (min_tick_out ^ set_min);
+
+always @(posedge min_tick or negedge reset_n) begin
+    if(reset_n == 1'b0) begin
+        min_count <= 7'b0;
+        hr_tick_reg <= 1'b0;
+    end
+    else if(min_count == MIN_MOD) begin
+        min_count <= 7'b0;
+        hr_tick_reg <= 1'b1;
+    end
+    else begin
+        min_count <= min_count + 1'b1;
+        hr_tick_reg <= 1'b0;
+    end
+end
+
+assign hr_tick_out = hr_tick_reg;
+
+
+//hours counter
+reg [5:0] hr_count;
+localparam HR_MOD = 6'd23; //6'd23 for mod 24 counter
+wire hr_tick;
+
+assign hr_tick = (hr_tick_out ^ set_hr);
+
+always @(posedge hr_tick or negedge reset_n) begin
+    if(reset_n == 1'b0) begin
+        hr_count <= 7'b0;
+    end
+    else if(hr_count == HR_MOD) begin
+        hr_count <= 7'b0;
+    end
+    else begin
+        hr_count <= hr_count + 1'b1;
+    end
+end
+
+
 
 endmodule
