@@ -3,17 +3,28 @@
 //Part Number: GW1NR-LV9QN88PC6/I5
 //Device: GW1NR-9C
 
+/****************************************************************System inputs***************************************************************/
+//RESET INPUT (Active low)
+IO_LOC "reset_n" 32;
+IO_PORT "reset_n" IO_TYPE=LVCMOS33 PULL_MODE=UP;
 
 //SYSTEM CLOCK INPUT
 //uses on board 27 MHz Oscillator
 IO_LOC "sys_clk" 52;
 IO_PORT "sys_clk" IO_TYPE=LVCMOS33 PULL_MODE=UP;
 
-//SYSTEM_RESET INPUT
+//MODE INPUT
 //uses on board switch S2
-IO_LOC "sys_rst_n" 3;
-IO_PORT "sys_rst_n" PULL_MODE=UP;
+IO_LOC "mode" 3;
+IO_PORT "mode" PULL_MODE=UP;
 
+//SET INPUT
+//uses on board switch S1
+IO_LOC "set" 4;
+IO_PORT "set" PULL_MODE=UP;
+/****************************************************************System inputs***************************************************************/
+
+/****************************************************************System outputs***************************************************************/
 //7 SEGMENT PINS
 IO_LOC "SA" 34; //J5.5
 IO_PORT "SA" PULL_MODE=UP DRIVE=8; 
@@ -41,16 +52,4 @@ IO_LOC "S2" 35; //J5.14
 IO_PORT "S2" PULL_MODE=UP DRIVE=8;
 IO_LOC "S3" 33; //J5.15
 IO_PORT "S3" PULL_MODE=UP DRIVE=8;
-
-//test segment select using onboard leds
-//led SELECT PINS
-//     [**0000]
-//      S0 S1    S2 S3
-//IO_LOC "S0" 10;
-//IO_PORT "S0" PULL_MODE=DOWN DRIVE=8;
-//IO_LOC "S1" 11;
-//IO_PORT "S1" PULL_MODE=DOWN DRIVE=8;
-//IO_LOC "S2" 13;
-//IO_PORT "S2" PULL_MODE=DOWN DRIVE=8;
-//IO_LOC "S3" 14;
-//IO_PORT "S3" PULL_MODE=DOWN DRIVE=8;
+/****************************************************************System outputs***************************************************************/

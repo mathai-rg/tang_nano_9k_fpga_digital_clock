@@ -4,7 +4,6 @@
 module bin_to_7_seg(
     input clk,
     input rstn,
-    
     input [3:0] bin,
     
     output reg [6:0] out
